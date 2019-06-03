@@ -42,8 +42,7 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
 
     @Override
     protected View createConvertView() {
-        return LayoutInflater.from(mContext)
-                .inflate(R.layout.popup_font_layout, null);
+        return LayoutInflater.from(mContext).inflate(R.layout.popup_font_layout, null);
     }
 
     public FontPopup(Context context) {
@@ -87,18 +86,6 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
                 break;
             }
         }
-        //改变字体
-        if (typeIndex != mTypeIndex) {
-            mTypeIndex = typeIndex;
-            setUsedButton();
-            if (mListener != null)
-                mListener.onTypefaceSelected(mTypeIndex);
-        }
-        //改变颜色
-        if (color != 0) {
-            if (mListener != null)
-                mListener.onColorSelected(color);
-        }
     }
 
     private void setUsedButton() {
@@ -137,13 +124,6 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
     }
 
     private void initViews() {
-        mTextColors = new int[]{
-                0xff121111,  //黑
-                0x8A000000,  //常规
-                0xffa9a8a8,  //夜间
-                0xfbe6e3e3,  //白
-                0xff486c94,  //蓝
-        };
         mTexts = new TextView[]{
                 (TextView) mConvertView.findViewById(R.id.text_system),
         };

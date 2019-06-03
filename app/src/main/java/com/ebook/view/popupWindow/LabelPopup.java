@@ -28,8 +28,7 @@ public class LabelPopup extends BasePopupWindow {
 
     @Override
     protected View createConvertView() {
-        return LayoutInflater.from(mContext)
-                .inflate(R.layout.popup_label_layout, null);
+        return LayoutInflater.from(mContext).inflate(R.layout.popup_label_layout, null);
     }
 
     public interface OnLabelSelectedListener {

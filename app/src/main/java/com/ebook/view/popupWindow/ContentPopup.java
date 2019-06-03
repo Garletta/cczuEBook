@@ -33,8 +33,7 @@ public class ContentPopup extends BasePopupWindow {
 
     @Override
     protected View createConvertView() {
-        return LayoutInflater.from(mContext)
-                .inflate(R.layout.popup_content_layout, null);
+        return LayoutInflater.from(mContext).inflate(R.layout.popup_content_layout, null);
     }
 
 

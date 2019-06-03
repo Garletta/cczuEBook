@@ -57,8 +57,7 @@ public class SettingPopup extends BasePopupWindow implements View.OnClickListene
 
     @Override
     protected View createConvertView() {
-        return LayoutInflater.from(mContext)
-                .inflate(R.layout.popup_setting_layout, null);
+        return LayoutInflater.from(mContext).inflate(R.layout.popup_setting_layout, null);
     }
 
     @Override
