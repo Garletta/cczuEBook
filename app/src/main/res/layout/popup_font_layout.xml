@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#f5f2f2"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="bottom"
+    app:cardCornerRadius="6dp"
+    android:elevation="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"
-        android:orientation="horizontal">
-
+        android:orientation="horizontal"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/text_system"
@@ -21,19 +21,16 @@
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
             android:text="系统默认字体"
-            android:textSize="20sp"
-            />
-
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btn_system"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:background="@drawable/btn_font"
             android:text="点击使用"
             android:textColor="@color/stroke_color_light_normal"/>
 
     </LinearLayout>
-
 </LinearLayout>

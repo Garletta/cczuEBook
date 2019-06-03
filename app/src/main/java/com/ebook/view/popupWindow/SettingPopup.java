@@ -74,7 +74,6 @@ public class SettingPopup extends BasePopupWindow implements View.OnClickListene
         initEvents();
     }
 
-
     private void initEvents() {
         PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);
         if (paintInfo != null) {
@@ -169,11 +168,9 @@ public class SettingPopup extends BasePopupWindow implements View.OnClickListene
         for (SeekBar seekBar : mSeekBars) {
             //获取seekBar的layer-list drawable对象
             LayerDrawable layerDrawable = (LayerDrawable) seekBar.getProgressDrawable();
-
             //层次包括背景图和进度,所以进度直接设为1,获取并设置进度条背景
             Drawable drawable = layerDrawable.getDrawable(1);
             drawable.setColorFilter(mStrokeColors[mTheme], PorterDuff.Mode.SRC);
-
             //获取thumb背景
             Drawable thumb = seekBar.getThumb();
             thumb.setColorFilter(mStrokeColors[mTheme], PorterDuff.Mode.SRC);
@@ -195,19 +192,24 @@ public class SettingPopup extends BasePopupWindow implements View.OnClickListene
     }
 
     private void initViews() {
+        //弹窗视图
         mCardView = (CardView) mConvertView.findViewById(R.id.setting_pop_card_view);
+        //自动调节亮度按钮
         mSwitchView = (SwitchView) mConvertView.findViewById(R.id.switch_view);
+        //阅读模式按钮
         mThemeBtns = new Button[]{
                 (Button) mConvertView.findViewById(R.id.old_time_btn),
                 (Button) mConvertView.findViewById(R.id.usual_btn),
                 (Button) mConvertView.findViewById(R.id.eye_btn),
                 (Button) mConvertView.findViewById(R.id.night_btn)
         };
+        //翻页按钮
         mFlipStyleBtns = new Button[]{
                 (Button) mConvertView.findViewById(R.id.flip_page_like_btn),
                 (Button) mConvertView.findViewById(R.id.flip_cover_btn),
                 (Button) mConvertView.findViewById(R.id.flip_no_effect_btn)
         };
+        //亮度和字体大小滚动条
         mSeekBars = new SeekBar[]{
                 (SeekBar) mConvertView.findViewById(R.id.brightness_seek_bar),
                 (SeekBar) mConvertView.findViewById(R.id.text_size_seek_bar)
@@ -222,7 +224,7 @@ public class SettingPopup extends BasePopupWindow implements View.OnClickListene
                 0xffece5d3,  //复古
                 0xfff2f1f1,  //常规
                 0xffe1f4e7,  //护眼
-                0xfd464546  //夜间
+                0xfd464546   //夜间
         };
         mStrokeColors = new int[]{
                 0xffd49762,  //复古

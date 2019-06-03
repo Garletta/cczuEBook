@@ -15,9 +15,7 @@ public abstract class BasePopupWindow extends PopupWindow {
     protected Context mContext;
     protected View mConvertView;
 
-    /**
-     * @function 返回布局
-     */
+    //返回布局
     protected abstract View createConvertView();
 
     public BasePopupWindow(Context context) {
@@ -25,7 +23,6 @@ public abstract class BasePopupWindow extends PopupWindow {
         mContext = context;
         mConvertView = createConvertView();
         setContentView(mConvertView);
-        //一些常用的基本设置
         //获取屏幕的宽高
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -48,11 +45,9 @@ public abstract class BasePopupWindow extends PopupWindow {
         });
     }
 
-    /**
-     * @function 传入屏幕宽高，设置popupWindow默认宽高
-     */
+    //传入屏幕宽高，设置popupWindow默认宽高
     protected void setSize(int width, int height) {
         setWidth(width);
-        setHeight((int) (height * 0.85));
+        setHeight((int) (height * 0.5));
     }
 }

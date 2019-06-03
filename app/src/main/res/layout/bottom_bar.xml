@@ -17,7 +17,6 @@
         android:layout_weight="1"
         android:background="@drawable/btn_bottom_bar"
         android:text="目录"
-
         />
 
     <Button
@@ -38,7 +37,6 @@
         android:layout_weight="1"
         android:background="@drawable/btn_bottom_bar"
         android:text="字体"
-
         />
 
     <Button
@@ -49,8 +47,5 @@
         android:layout_weight="1"
         android:background="@drawable/btn_bottom_bar"
         android:text="书签"
-
         />
-
 </LinearLayout>
-

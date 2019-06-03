@@ -31,7 +31,6 @@ public class ContentPopup extends BasePopupWindow {
         return LayoutInflater.from(mContext).inflate(R.layout.popup_content_layout, null);
     }
 
-
     public interface OnContentSelectedListener {
         void OnContentClicked(int paraIndex);
     }
@@ -66,12 +65,9 @@ public class ContentPopup extends BasePopupWindow {
 
         @Override
         public void onClick(View v) {
-
             if (mListener != null)
                 mListener.OnContentClicked(mBook.getContentParaIndexs().get(mPosition));
-
         }
-
     }
 
     private class ContentsAdapter extends RecyclerView.Adapter<ContentsHolder> {
@@ -80,7 +76,6 @@ public class ContentPopup extends BasePopupWindow {
         public ContentsAdapter(List<String> bookContents) {
             mBookContents = bookContents;
         }
-
 
         @Override
         public ContentsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -99,11 +94,8 @@ public class ContentPopup extends BasePopupWindow {
         }
     }
 
-
     public void setBackgroundColor(int color) {
         mLinearLayout.setBackgroundColor(color);
 
     }
-
-
 }
