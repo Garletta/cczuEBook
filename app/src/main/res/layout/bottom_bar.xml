@@ -20,7 +20,6 @@
 
         />
 
-
     <Button
         android:id="@+id/button_setting"
         android:layout_width="0dp"

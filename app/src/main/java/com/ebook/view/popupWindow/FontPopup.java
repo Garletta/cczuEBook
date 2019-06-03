@@ -151,11 +151,6 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
                 (Button) mConvertView.findViewById(R.id.btn_system),
         };
         mFabs = new FloatingActionButton[]{
-                (FloatingActionButton) mConvertView.findViewById(R.id.fab_black),
-                (FloatingActionButton) mConvertView.findViewById(R.id.fab_normal),
-                (FloatingActionButton) mConvertView.findViewById(R.id.fab_night),
-                (FloatingActionButton) mConvertView.findViewById(R.id.fab_white),
-                (FloatingActionButton) mConvertView.findViewById(R.id.fab_blue)
         };
     }
 }

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#f5f2f2"
-              android:orientation="vertical">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f5f2f2"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:background="#ffffff"
-        android:gravity="center_vertical"
         android:orientation="horizontal">
 
 
@@ -34,64 +33,6 @@
             android:background="@drawable/btn_font"
             android:text="点击使用"
             android:textColor="@color/stroke_color_light_normal"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="15dp"
-        android:layout_weight="1"
-        android:background="#ffffff"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="1"
-            android:text="字体颜色"
-            android:textSize="20sp"
-            />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_black"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_margin="8dp"
-            app:backgroundTint="@color/text_color_black"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_normal"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_margin="8dp"
-            app:backgroundTint="#fb696767"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_night"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_margin="8dp"
-            app:backgroundTint="@color/text_color_night"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_white"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_margin="8dp"
-            app:backgroundTint="@color/text_color_white"/>
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_blue"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="20dp"
-            app:backgroundTint="@color/text_color_blue"/>
-
 
     </LinearLayout>
 
