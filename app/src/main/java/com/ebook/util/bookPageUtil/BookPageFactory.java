@@ -75,17 +75,17 @@ public class BookPageFactory {
         mVisibleHeight = mHeight - marginHeight * 2;
 
         mBgColors = new int[]{
-                0xffe7dcbe,  //复古
-                0xffffffff,  // 常规
-                0xffcbe1cf,  //护眼
-                0xff333232  //夜间
+                0xffe7dcbe,     //复古
+                0xffffffff,     // 常规
+                0xffcbe1cf,     //护眼
+                0xff333232      //夜间
         };
 
         mTextColors = new int[]{
-                0x8A000000,
-                0x8A000000,
-                0x8A000000,
-                0xffa9a8a8   //夜间
+                0x8A000000,     //复古
+                0x8A000000,     // 常规
+                0x8A000000,     //护眼
+                0xffa9a8a8      //夜间
         };
 
         PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);
