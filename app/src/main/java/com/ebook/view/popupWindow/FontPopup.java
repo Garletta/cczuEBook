@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 import com.ebook.R;
 import com.ebook.util.bookPageUtil.PaintInfo;
 import com.ebook.util.SaveHelper;
@@ -18,11 +17,6 @@ import com.ebook.util.SaveHelper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-
-/**
- * Created by Administrator on 2017/1/7.
- */
 
 public class FontPopup extends BasePopupWindow implements View.OnClickListener {
     public static final String FONTS = "fonts";
@@ -52,63 +46,47 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
                 .inflate(R.layout.popup_font_layout, null);
     }
 
-
     public FontPopup(Context context) {
         super(context);
-
         getFontFromAssets();       //从Assets中获取字体
-
         initViews();
-
         initEvents();
-
     }
 
     private void initEvents() {
-
         //设置初始状态
         PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);
         if (paintInfo != null) {
             mTypeIndex = paintInfo.typeIndex;
         }
         setUsedButton();
-
         for (int i = 0; i < mTexts.length; i++) {
             mTexts[i].setTypeface(mTypefaceList.get(i));
         }
-
         for (Button button : mButtons) {
             button.setOnClickListener(this);
-
         }
-
         for (FloatingActionButton fab : mFabs) {
             fab.setOnClickListener(this);
-
         }
-
     }
-
 
     @Override
     public void onClick(View v) {
         int typeIndex = mTypeIndex;
         int color = 0;
-
         for (int i = 0; i < mButtons.length; i++) {
             if (v.getId() == mButtons[i].getId()) {
                 typeIndex = i;
                 break;
             }
         }
-
         for (int i = 0; i < mFabs.length; i++) {
             if (v.getId() == mFabs[i].getId()) {
                 color = mTextColors[i];
                 break;
             }
         }
-
         //改变字体
         if (typeIndex != mTypeIndex) {
             mTypeIndex = typeIndex;
@@ -116,48 +94,34 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
             if (mListener != null)
                 mListener.onTypefaceSelected(mTypeIndex);
         }
-
         //改变颜色
         if (color != 0) {
             if (mListener != null)
                 mListener.onColorSelected(color);
         }
-
-
     }
-
 
     private void setUsedButton() {
         int unUsedColor = 0xffc1c0c0;
         int usedColor = 0xFF5FE677;
         Button usedButton = mButtons[mTypeIndex];
-
         for (Button button : mButtons) {
-
             if (button.getId() == usedButton.getId()) {
-
                 button.setText("正在使用");
                 button.setTextColor(usedColor);
                 GradientDrawable drawable = (GradientDrawable) button.getBackground();
                 drawable.setStroke(5, usedColor);   // 设置边框颜色
-
-
             } else {
-
                 button.setText("点击使用");
                 button.setTextColor(unUsedColor);
                 GradientDrawable drawable = (GradientDrawable) button.getBackground();
                 drawable.setStroke(5, unUsedColor);   // 设置边框颜色
-
             }
-
         }
-
     }
 
     private void getFontFromAssets() {
         mTypefaceList.add(Typeface.DEFAULT);
-
         String[] fontNameList = null;
         AssetManager assetManager = mContext.getAssets();
         try {
@@ -165,14 +129,11 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         for (int i = 0; i < fontNameList.length; i++) {
-
             String fontPath = FONTS + "/" + fontNameList[i];
             Typeface typeface = Typeface.createFromAsset(assetManager, fontPath);//根据路径得到Typeface
             mTypefaceList.add(typeface);
         }
-
     }
 
     private void initViews() {
@@ -183,8 +144,6 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
                 0xfbe6e3e3,  //白
                 0xff486c94,  //蓝
         };
-
-
         mTexts = new TextView[]{
                 (TextView) mConvertView.findViewById(R.id.text_system),
                 (TextView) mConvertView.findViewById(R.id.text_hksn),
@@ -192,7 +151,6 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
                 (TextView) mConvertView.findViewById(R.id.text_kai),
                 (TextView) mConvertView.findViewById(R.id.text_yy)
         };
-
         mButtons = new Button[]{
                 (Button) mConvertView.findViewById(R.id.btn_system),
                 (Button) mConvertView.findViewById(R.id.btn_hksn),
@@ -200,7 +158,6 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
                 (Button) mConvertView.findViewById(R.id.btn_kai),
                 (Button) mConvertView.findViewById(R.id.btn_yy)
         };
-
         mFabs = new FloatingActionButton[]{
                 (FloatingActionButton) mConvertView.findViewById(R.id.fab_black),
                 (FloatingActionButton) mConvertView.findViewById(R.id.fab_normal),
@@ -208,9 +165,5 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
                 (FloatingActionButton) mConvertView.findViewById(R.id.fab_white),
                 (FloatingActionButton) mConvertView.findViewById(R.id.fab_blue)
         };
-
-
     }
-
-
 }

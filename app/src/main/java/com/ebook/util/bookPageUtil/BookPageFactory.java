@@ -21,10 +21,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Mum on 2017/2/6.
- */
-
 public class BookPageFactory {
     private Context mContext;
     private int mWidth;
@@ -58,13 +54,11 @@ public class BookPageFactory {
     private ReadInfo mReadInfo;
     private String percentStr;
 
-
     public BookPageFactory(Context context, int bookId) {
         mContext = context;
         mBookId = bookId;
         calWidthAndHeight();
         getFontFromAssets();
-
         initDatas();
     }
 
@@ -94,13 +88,11 @@ public class BookPageFactory {
                 0xffa9a8a8   //夜间
         };
 
-
         PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);
         if (paintInfo != null)
             mPaintInfo = paintInfo;
         else
             mPaintInfo = new PaintInfo();
-
         mLineHeight = mPaintInfo.textSize * 1.5f;
         mLineCount = (int) (mVisibleHeight / mLineHeight) - 1;
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -121,13 +113,11 @@ public class BookPageFactory {
         if (!mReadInfo.isLastNext) {
             pageDown();
             mReadInfo.isLastNext = true;
-
         }
 
         Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(mPaintInfo.bgColor);
-
         //下一页
         mPageLines = getNextPageLines();
         //已经到最后一页了
@@ -144,16 +134,13 @@ public class BookPageFactory {
 
         //绘制显示在底部的信息
         drawInfo(canvas, powerPercent);
-
         return bitmap;
-
     }
 
 
     public Bitmap drawPrePage(float powerPercent) {
         if (mReadInfo.isLastNext) {
             pageUp();
-
             mReadInfo.isLastNext = false;
         }
 
@@ -174,14 +161,10 @@ public class BookPageFactory {
             y += mLineHeight;
             canvas.drawText(strLine, marginWidth, y, mPaint);
         }
-
         //绘制显示的信息
         drawInfo(canvas, powerPercent);
-
         return bitmap;
-
     }
-
 
     public List<Bitmap> updatePagesByContent(int nextParaIndex, float powerPercent) {
         mReadInfo.nextParaIndex = nextParaIndex;
@@ -194,11 +177,8 @@ public class BookPageFactory {
         List<Bitmap> bitmaps = new ArrayList<>();
         bitmaps.add(drawNextPage(powerPercent));
         bitmaps.add(drawNextPage(powerPercent));
-
         return bitmaps;
-
     }
-
 
     public List<Bitmap> updateTheme(int theme, float powerPercent) {
         mPaintInfo.bgColor = mBgColors[theme];
@@ -224,13 +204,10 @@ public class BookPageFactory {
     }
 
     public List<Bitmap> drawCurTwoPages(float powerPercent) {
-
         setIndexToCurStart();
-
         mPaint.setColor(mPaintInfo.textColor);
         mPaint.setTextSize(mPaintInfo.textSize);
         mPaint.setTypeface(mTypefaceList.get(mPaintInfo.typeIndex));
-
         List<Bitmap> bitmaps = new ArrayList<>();
         if (mReadInfo.isLastNext) {
             bitmaps.add(drawNextPage(powerPercent));
@@ -239,29 +216,22 @@ public class BookPageFactory {
             bitmaps.add(drawPrePage(powerPercent));
             bitmaps.add(0, drawPrePage(powerPercent));
         }
-
         return bitmaps;
     }
 
     private void setIndexToCurStart() {
-
         if (mReadInfo.isLastNext) {
             pageUp();
             mReadInfo.nextParaIndex += 1;
-
             if (!mReadInfo.isPreRes)
                 return;
-
             String string = mParaList.get(mReadInfo.nextParaIndex);
 
             while (string.length() > 0) {
                 //检测一行能够显示多少字
                 int size = mPaint.breakText(string, true, mVisibleWidth, null);
-
                 mReadInfo.nextResLines.add(string.substring(0, size));
-
                 string = string.substring(size);
-
             }
 
             mReadInfo.nextResLines.clear();
@@ -270,25 +240,17 @@ public class BookPageFactory {
 
             mReadInfo.preResLines.clear();
             mReadInfo.isPreRes = false;
-
-
         } else {
             pageDown();
             mReadInfo.nextParaIndex -= 1;
-
             if (!mReadInfo.isNextRes)
                 return;
-
             String string = mParaList.get(mReadInfo.nextParaIndex);
-
             while (string.length() > 0) {
                 //检测一行能够显示多少字
                 int size = mPaint.breakText(string, true, mVisibleWidth, null);
-
                 mReadInfo.preResLines.add(string.substring(0, size));
-
                 string = string.substring(size);
-
             }
 
             mReadInfo.preResLines.removeAll(mReadInfo.nextResLines);
@@ -297,11 +259,7 @@ public class BookPageFactory {
 
             mReadInfo.nextResLines.removeAll(mReadInfo.preResLines);
             mReadInfo.isNextRes = false;
-
-
         }
-
-
     }
 
     private String findContent(int paraIndex) {    //找到当前page对应的目录
@@ -309,14 +267,10 @@ public class BookPageFactory {
             if (paraIndex >= mContentParaIndex.get(i) && paraIndex < mContentParaIndex.get(i + 1)) {
                 if (i == 0)
                     i = 1;   //合并卷名和第一章
-
                 return mContents.get(i);
             }
-
         }
-
         return mContents.get(mContentParaIndex.size() - 1);
-
     }
 
     private void drawInfo(Canvas canvas, float powerPercent) {
@@ -377,16 +331,11 @@ public class BookPageFactory {
     }
 
     private List<String> getNextPageLines() {
-
         String string = "";
-
         List<String> lines = new ArrayList<>();
-
         if (mReadInfo.isNextRes) {
             lines.addAll(mReadInfo.nextResLines);
-
             mReadInfo.nextResLines.clear();
-
             mReadInfo.isNextRes = false;
         }
 
@@ -397,183 +346,118 @@ public class BookPageFactory {
         mCurContent = findContent(mReadInfo.nextParaIndex);
 
         while (lines.size() < mLineCount && mReadInfo.nextParaIndex < mParaListSize) {
-
             string = mParaList.get(mReadInfo.nextParaIndex);
-
             mReadInfo.nextParaIndex++;
-
             while (string.length() > 0) {
                 //检测一行能够显示多少字
                 int size = mPaint.breakText(string, true, mVisibleWidth, null);
-
                 lines.add(string.substring(0, size));
-
                 string = string.substring(size);
-
             }
-
         }
 
         while (lines.size() > mLineCount) {
             mReadInfo.isNextRes = true;
-
             int end = lines.size() - 1;
-
             mReadInfo.nextResLines.add(0, lines.get(end));
-
             lines.remove(end);
         }
-
         return lines;
     }
 
 
     private List<String> getPrePageLines() {
-
         String string = "";
         List<String> lines = new ArrayList<>();
-
         if (mReadInfo.isPreRes) {
-
             lines.addAll(mReadInfo.preResLines);
-
             mReadInfo.preResLines.clear();
-
             mReadInfo.isPreRes = false;
         }
 
         if (mReadInfo.nextParaIndex < 0) {
-
             return lines;
         }
 
         mCurContent = findContent(mReadInfo.nextParaIndex);
 
         while (lines.size() < mLineCount && mReadInfo.nextParaIndex >= 0) {
-
             List<String> paraLines = new ArrayList<>();
-
             string = mParaList.get(mReadInfo.nextParaIndex);
-
             mReadInfo.nextParaIndex--;
-
             while (string.length() > 0) {
                 //检测一行能够显示多少字
                 int size = mPaint.breakText(string, true, mVisibleWidth, null);
-
                 paraLines.add(string.substring(0, size));
-
                 string = string.substring(size);
-
             }
-
             lines.addAll(0, paraLines);
-
         }
 
         while (lines.size() > mLineCount) {
             mReadInfo.isPreRes = true;
-
             mReadInfo.preResLines.add(lines.get(0));
-
             lines.remove(0);
         }
-
         return lines;
-
     }
 
     //向后移动两页的距离
     private void pageDown() {
         mReadInfo.nextParaIndex += 1;//移动到最后已读的段落
-
         String string = "";
-
         List<String> lines = new ArrayList<>();
-
         int totalLines = 2 * mLineCount + mReadInfo.preResLines.size();
-
         reset();
-
         while (lines.size() < totalLines && mReadInfo.nextParaIndex < mParaListSize) {
-
             string = mParaList.get(mReadInfo.nextParaIndex);
-
             mReadInfo.nextParaIndex++;
-
             while (string.length() > 0) {
                 //检测一行能够显示多少字
                 int size = mPaint.breakText(string, true, mVisibleWidth, null);
-
                 lines.add(string.substring(0, size));
-
                 string = string.substring(size);
-
             }
-
         }
 
         while (lines.size() > totalLines) {
             mReadInfo.isNextRes = true;
-
             int end = lines.size() - 1;
-
             mReadInfo.nextResLines.add(0, lines.get(end));
-
             lines.remove(end);
         }
-
-
     }
 
     //向前移动两页的距离
     private void pageUp() {
         mReadInfo.nextParaIndex -= 1; //移动到最后已读的段落
-
         String string = "";
-
         List<String> lines = new ArrayList<>();
-
         int totalLines = 2 * mLineCount + mReadInfo.nextResLines.size();
-
         reset();
-
         while (lines.size() < totalLines && mReadInfo.nextParaIndex >= 0) {
-
             List<String> paraLines = new ArrayList<>();
-
             string = mParaList.get(mReadInfo.nextParaIndex);
-
             mReadInfo.nextParaIndex--;
-
             while (string.length() > 0) {
                 //检测一行能够显示多少字
                 int size = mPaint.breakText(string, true, mVisibleWidth, null);
-
                 paraLines.add(string.substring(0, size));
-
                 string = string.substring(size);
-
             }
-
             lines.addAll(0, paraLines);
-
         }
 
         while (lines.size() > totalLines) {
             mReadInfo.isPreRes = true;
-
             mReadInfo.preResLines.add(lines.get(0));
-
             lines.remove(0);
         }
-
     }
 
     private void reset() {
         mReadInfo.preResLines.clear();
         mReadInfo.isPreRes = false;
-
         mReadInfo.nextResLines.clear();
         mReadInfo.isNextRes = false;
     }
@@ -583,15 +467,12 @@ public class BookPageFactory {
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(metrics);
-
         mWidth = metrics.widthPixels;
         mHeight = metrics.heightPixels;
-
     }
 
     private void getFontFromAssets() {
         mTypefaceList.add(Typeface.DEFAULT);
-
         String[] fontNameList = null;
         AssetManager assetManager = mContext.getAssets();
         try {
@@ -601,18 +482,15 @@ public class BookPageFactory {
         }
 
         for (int i = 0; i < fontNameList.length; i++) {
-
             String fontPath = FontPopup.FONTS + "/" + fontNameList[i];
             Typeface typeface = Typeface.createFromAsset(assetManager, fontPath);//根据路径得到Typeface
             mTypefaceList.add(typeface);
         }
-
     }
 
     public ReadInfo getReadInfo() {
         return mReadInfo;
     }
-
 
     public PaintInfo getPaintInfo() {
         return mPaintInfo;

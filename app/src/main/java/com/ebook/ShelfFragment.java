@@ -28,24 +28,19 @@ public class ShelfFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_shelf_layout, container, false);
         initEvents(v);
         return v;
-
     }
 
     private void initEvents(View v) {
         mContext = getActivity();
         mBookList = BookLab.newInstance(mContext).getBookList();
-
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.fragment_book_shelf_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
         recyclerView.setAdapter(new BookAdapter(mBookList));
-
     }
-
 
     private class BookHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView mBookCover;
         private Book mBook;
-
         public BookHolder(View itemView) {
             super(itemView);
             mBookCover = (ImageView) itemView.findViewById(R.id.item_recycler_view_image_view);
@@ -62,22 +57,17 @@ public class ShelfFragment extends Fragment {
             Intent intent = ReadingActivity.newIntent(mContext, mBookList.indexOf(mBook));
             startActivity(intent);
         }
-
-
     }
 
     private class BookAdapter extends RecyclerView.Adapter<BookHolder> {
         private List<Book> bookList = new ArrayList<>();
-
         public BookAdapter(List<Book> bookList) {
             this.bookList = bookList;
         }
-
         @Override
         public BookHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View view = inflater.inflate(R.layout.item_recycler_view_shelf, parent, false);
-
             return new BookHolder(view);
         }
 
@@ -91,5 +81,4 @@ public class ShelfFragment extends Fragment {
             return bookList.size();
         }
     }
-
 }

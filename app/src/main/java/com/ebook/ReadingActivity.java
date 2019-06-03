@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.WindowManager;
 
-
 public class ReadingActivity extends SingleFragmentActivity {
     public static final String EXTRA_BOOK_ID = "EXTRA_BOOK_ID";
 
@@ -17,8 +16,7 @@ public class ReadingActivity extends SingleFragmentActivity {
 
     @Override
     protected void setScreen() {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,    //全屏
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);    //全屏
     }
 
     @Override
@@ -26,6 +24,5 @@ public class ReadingActivity extends SingleFragmentActivity {
         int bookId = getIntent().getIntExtra(EXTRA_BOOK_ID, 0);
         return ReadingFragment.newInstance(bookId);
     }
-
 }
 

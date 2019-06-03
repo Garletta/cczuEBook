@@ -1,11 +1,6 @@
 package com.ebook.util.bookPageUtil;
 
-
 import org.litepal.crud.DataSupport;
-
-/**
- * Created by Administrator on 2017/2/27.
- */
 
 public class Label extends DataSupport{
     private int mBookId;
@@ -15,11 +10,9 @@ public class Label extends DataSupport{
     private boolean isPrePageOver;
     private String readInfoStr; //readInfo对象序列化编码后的String
 
-
     public int getBookId() {
         return mBookId;
     }
-
 
     public boolean isPrePageOver() {
         return isPrePageOver;
@@ -41,7 +34,6 @@ public class Label extends DataSupport{
         return readInfoStr;
     }
 
-
     public void setBookId(int bookId) {
         mBookId = bookId;
     }
@@ -61,7 +53,6 @@ public class Label extends DataSupport{
     public void setPrePageOver(boolean prePageOver) {
         isPrePageOver = prePageOver;
     }
-
 
     public void setReadInfoStr(String readInfoStr) {
         this.readInfoStr = readInfoStr;

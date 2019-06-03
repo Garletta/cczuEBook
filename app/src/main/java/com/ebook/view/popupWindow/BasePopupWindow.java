@@ -10,12 +10,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
-import com.ebook.R;
-
-/**
- * Created by xyy on 2017/3/31.
- */
-
 public abstract class BasePopupWindow extends PopupWindow {
 
     protected Context mContext;
@@ -26,27 +20,21 @@ public abstract class BasePopupWindow extends PopupWindow {
      */
     protected abstract View createConvertView();
 
-
     public BasePopupWindow(Context context) {
         super(context);
         mContext = context;
         mConvertView = createConvertView();
         setContentView(mConvertView);
-
         //一些常用的基本设置
-
         //获取屏幕的宽高
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(metrics);
-
         setSize(metrics.widthPixels, metrics.heightPixels);
-
         setFocusable(true);
         setTouchable(true);
         setOutsideTouchable(true);
         setBackgroundDrawable(new BitmapDrawable());
-
         //点击popupWindow外部消失
         setTouchInterceptor(new View.OnTouchListener() {
             @Override
@@ -58,9 +46,7 @@ public abstract class BasePopupWindow extends PopupWindow {
                 return false;
             }
         });
-
     }
-
 
     /**
      * @function 传入屏幕宽高，设置popupWindow默认宽高
@@ -68,8 +54,5 @@ public abstract class BasePopupWindow extends PopupWindow {
     protected void setSize(int width, int height) {
         setWidth(width);
         setHeight((int) (height * 0.85));
-
     }
-
-
 }

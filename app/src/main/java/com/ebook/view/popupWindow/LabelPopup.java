@@ -19,18 +19,12 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * Created by Administrator on 2017/1/7.
- */
-
 public class LabelPopup extends BasePopupWindow {
     private int mBookId;
     private RecyclerView mRecyclerView;
     private LinearLayout mLinearLayout;
     private FloatingActionButton mClearFab;
     private OnLabelSelectedListener mListener;
-
 
     @Override
     protected View createConvertView() {
@@ -46,18 +40,14 @@ public class LabelPopup extends BasePopupWindow {
         mListener = listener;
     }
 
-
     public LabelPopup(Context context, int bookId) {
         super(context);
         mBookId = bookId;
-
         mLinearLayout = (LinearLayout) mConvertView.findViewById(R.id.pop_label_linear_layout);
         mClearFab = (FloatingActionButton) mConvertView.findViewById(R.id.pop_label_clear);
         mRecyclerView = (RecyclerView) mConvertView.findViewById(R.id.pop_label_recycle_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-
         updateUI();
-
         mClearFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,14 +55,11 @@ public class LabelPopup extends BasePopupWindow {
                 updateUI();
             }
         });
-
     }
 
     //刷新列表
     public void updateUI() {
-
         List<Label> labelList = new ArrayList<>();
-
         List<Label> labels = DataSupport.where("mBookId=?", mBookId + "").find(Label.class);
         if (labels.size() > 0) {
             for (int i = labels.size() - 1; i >= 0; i--) {
@@ -80,16 +67,13 @@ public class LabelPopup extends BasePopupWindow {
             }
         }
         mRecyclerView.setAdapter(new LabelAdapter(labelList));
-
     }
-
 
     private class LabelHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mDetails;
         private TextView mProgress;
         private TextView mTime;
         private Label mLabel;
-
         public LabelHolder(View itemView) {
             super(itemView);
             mDetails = (TextView) itemView.findViewById(R.id.label_popup_details);
@@ -97,31 +81,24 @@ public class LabelPopup extends BasePopupWindow {
             mTime = (TextView) itemView.findViewById(R.id.label_popup_time);
             itemView.setOnClickListener(this);
         }
-
         public void bind(Label label) {
             mLabel = label;
             mDetails.setText(label.getDetails());
             mProgress.setText(label.getProgress());
             mTime.setText(label.getTime());
         }
-
         @Override
         public void onClick(View v) {
             if (mListener != null)
                 mListener.OnLabelClicked(mLabel);
-
         }
-
-
     }
 
     private class LabelAdapter extends RecyclerView.Adapter<LabelHolder> {
         private List<Label> labelList;
-
         public LabelAdapter(List<Label> labelList) {
             this.labelList = labelList;
         }
-
 
         @Override
         public LabelHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -133,7 +110,6 @@ public class LabelPopup extends BasePopupWindow {
         @Override
         public void onBindViewHolder(LabelHolder holder, int position) {
             holder.bind(labelList.get(position));
-
         }
 
         @Override
@@ -142,11 +118,7 @@ public class LabelPopup extends BasePopupWindow {
         }
     }
 
-
     public void setBackgroundColor(int color) {
         mLinearLayout.setBackgroundColor(color);
-
     }
-
-
 }

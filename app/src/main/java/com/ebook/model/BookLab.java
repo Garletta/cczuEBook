@@ -12,10 +12,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Mum on 2017/1/24.
- */
-
 public class BookLab {
     public static final String TEXT = "text";
     public static final String IMAGE = "image";
@@ -27,12 +23,10 @@ public class BookLab {
     private String[] mAssetsImageList;
     private String[] mAssetsTextList;
 
-
     private BookLab(Context context) {
         mAssetManager = context.getAssets();
         loadAssetsFiles();
     }
-
 
     public static BookLab newInstance(Context context) {
         if (sBookLab == null) {
@@ -52,7 +46,6 @@ public class BookLab {
             e.printStackTrace();
         }
 
-
         for (int i = 0; i < mAssetsTextList.length; i++) {
             //获取书名
             String[] nameSplit = mAssetsTextList[i].split("_");
@@ -67,14 +60,10 @@ public class BookLab {
             String textPath = TEXT + "/" + mAssetsTextList[i];
             String bodyText = loadText(textPath);
 
-
             Book book = new Book(bookTitle, bookCover, bodyText);
             mBookList.add(book);
-
         }
-
     }
-
 
     //从assets中读取文本
     private String loadText(String path) {
@@ -101,9 +90,7 @@ public class BookLab {
                 }
             }
         }
-
         return stringBuilder.toString();
-
     }
 
     //从assets中读取图片
@@ -113,7 +100,6 @@ public class BookLab {
         try {
             in = mAssetManager.open(path);
             image = BitmapFactory.decodeStream(in);
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -122,7 +108,6 @@ public class BookLab {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
         return image;
     }
