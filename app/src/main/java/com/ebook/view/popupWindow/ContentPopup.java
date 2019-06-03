@@ -19,11 +19,6 @@ import com.ebook.model.Book;
 
 import java.util.List;
 
-
-/**
- * Created by Administrator on 2017/1/7.
- */
-
 public class ContentPopup extends BasePopupWindow {
     private RecyclerView mRecyclerView;
     private LinearLayout mLinearLayout;
@@ -54,8 +49,6 @@ public class ContentPopup extends BasePopupWindow {
         mRecyclerView.setAdapter(new ContentsAdapter(mBook.getBookContents()));
 
     }
-
-
     private class ContentsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTextView;
         private int mPosition;
@@ -95,13 +88,11 @@ public class ContentPopup extends BasePopupWindow {
             View view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
             return new ContentsHolder(view);
         }
-
         @Override
         public void onBindViewHolder(ContentsHolder holder, int position) {
             holder.bind(mBookContents.get(position), position);
 
         }
-
         @Override
         public int getItemCount() {
             return mBookContents.size();

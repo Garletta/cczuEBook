@@ -83,9 +83,9 @@ public class BookPageFactory {
 
         mTextColors = new int[]{
                 0x8A000000,     //复古
-                0x8A000000,     // 常规
-                0x8A000000,     //护眼
-                0xffa9a8a8      //夜间
+                0x8A000000,    // 常规
+                0x8A000000,   //护眼
+                0xffa9a8a8    //夜间
         };
 
         PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);

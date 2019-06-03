@@ -155,7 +155,6 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
         label.setBookId(mBookId);
         label.setDetails(mBookPageFactory.getCurContent());
         label.setProgress(mBookPageFactory.getPercentStr());
-        label.setTime(timeStr);
         label.setPrePageOver(mFlipView.isPrePageOver());
         label.setReadInfoStr(objectStr);
         label.save();

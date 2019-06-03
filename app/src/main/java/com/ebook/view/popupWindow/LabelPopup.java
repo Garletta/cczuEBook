@@ -84,7 +84,6 @@ public class LabelPopup extends BasePopupWindow {
             mLabel = label;
             mDetails.setText(label.getDetails());
             mProgress.setText(label.getProgress());
-            mTime.setText(label.getTime());
         }
         @Override
         public void onClick(View v) {

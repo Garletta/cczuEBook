@@ -6,7 +6,6 @@ public class Label extends DataSupport{
     private int mBookId;
     private String mDetails;
     private String mProgress;
-    private String mTime;
     private boolean isPrePageOver;
     private String readInfoStr; //readInfo对象序列化编码后的String
 
@@ -16,10 +15,6 @@ public class Label extends DataSupport{
 
     public boolean isPrePageOver() {
         return isPrePageOver;
-    }
-
-    public String getTime() {
-        return mTime;
     }
 
     public String getProgress() {
@@ -44,10 +39,6 @@ public class Label extends DataSupport{
 
     public void setProgress(String progress) {
         mProgress = progress;
-    }
-
-    public void setTime(String time) {
-        mTime = time;
     }
 
     public void setPrePageOver(boolean prePageOver) {
