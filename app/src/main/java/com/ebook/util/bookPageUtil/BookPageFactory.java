@@ -1,7 +1,6 @@
 package com.ebook.util.bookPageUtil;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -14,9 +13,7 @@ import android.view.WindowManager;
 import com.ebook.model.Book;
 import com.ebook.model.BookLab;
 import com.ebook.util.SaveHelper;
-import com.ebook.view.popupWindow.FontPopup;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,38 +26,38 @@ public class BookPageFactory {
     private int mHeight;        //屏幕高
     private int marginWidth;    //边宽
     private int marginHeight;   //边高
-    private int mBookId;
+    private int mBookId;        //书ID
 
     private float mVisibleWidth;    //正文区域宽
     private float mVisibleHeight;   //正文区域高
 
-    private float mLineHeight;      //行高
+    private float mLineHeight;      //每行的高度
     private int mLineCount;         //一页能容纳的行数
 
     private List<String> mParaList; //文本段落集合
     private List<String> mContents; //目录集合(卷/章/回/集等)
     private List<Integer> mContentParaIndex;    //目录对应的在段落集合中的索引
-    private int mParaListSize;
+    private int mParaListSize;     //段落数量
 
     private List<String> mPageLines = new ArrayList<>();
     private String mCurContent;     //当前page对应的目录
-    private Paint mPaint;
+    private Paint mPaint;           //绘图对象
 
     private int[] mBgColors;        //书页背景颜色
     private int[] mTextColors;      //书页文本颜色
 
-    private List<Typeface> mTypefaceList = new ArrayList<>();
+    private List<Typeface> mTypefaceList = new ArrayList<>();   //字体
 
-    private PaintInfo mPaintInfo;
+    private PaintInfo mPaintInfo;   //绘制属性
     private ReadInfo mReadInfo;
-    private String percentStr;
+    private String percentStr;  //阅读百分比
 
     public BookPageFactory(Context context, int bookId) {
         mContext = context;
         mBookId = bookId;
+        mTypefaceList.add(Typeface.DEFAULT);    //初始化为默认字体
         calWidthAndHeight();    //获取屏幕的宽高
-        getFontFromAssets();    //从assets资源文件获取字体
-        initDatas();
+        initDatas();            //初始化数据
     }
 
     //获取屏幕的宽高
@@ -68,62 +65,59 @@ public class BookPageFactory {
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(metrics);
-        mWidth = metrics.widthPixels;
-        mHeight = metrics.heightPixels;
+        mWidth = metrics.widthPixels;   //屏幕宽
+        mHeight = metrics.heightPixels; //屏幕高
     }
 
-    //从assets资源文件获取字体
-    private void getFontFromAssets() {
-        mTypefaceList.add(Typeface.DEFAULT);
-    }
-
+    //初始化数据
     private void initDatas() {
-        Book book = BookLab.newInstance(mContext).getBookList().get(mBookId);
-        mParaList = book.getParagraphList();
-        mParaListSize = mParaList.size();
-        mContents = book.getBookContents();
-        mContentParaIndex = book.getContentParaIndexs();
+        Book book = BookLab.newInstance(mContext).getBookList().get(mBookId);   //获得点击书架上对应的书
 
-        marginWidth = (int) (mWidth / 30f);
-        marginHeight = (int) (mHeight / 60f);
-        mVisibleWidth = mWidth - marginWidth * 2;
-        mVisibleHeight = mHeight - marginHeight * 2;
+        marginWidth = (int) (mWidth / 30f);             //边宽
+        marginHeight = (int) (mHeight / 60f);           //边高
+        mVisibleWidth = mWidth - marginWidth * 2;      //正文区域宽
+        mVisibleHeight = mHeight - marginHeight * 2;   //正文区域高
 
-        mBgColors = new int[]{
-                0xffe7dcbe,     //复古
-                0xffffffff,     // 常规
-                0xffcbe1cf,     //护眼
-                0xff333232      //夜间
+        mParaList = book.getParagraphList();              //以段落为单位保存的正文内容
+        mParaListSize = mParaList.size();               //段落数量
+        mContents = book.getBookContents();              //目录集合(卷/章/回/集等)
+        mContentParaIndex = book.getContentParaIndexs();//目录对应的在段落集合中的索引
+
+        mBgColors = new int[]{  //阅读模式背景颜色
+                0xffe7dcbe, //复古
+                0xffffffff, //常规
+                0xffcbe1cf, //护眼
+                0xff333232  //夜间
+        };
+        mTextColors = new int[]{    //阅读模式文本颜色
+                0x8A000000, //复古
+                0x8A000000, //常规
+                0x8A000000, //护眼
+                0xffa9a8a8  //夜间
         };
 
-        mTextColors = new int[]{
-                0x8A000000,     //复古
-                0x8A000000,    // 常规
-                0x8A000000,   //护眼
-                0xffa9a8a8    //夜间
-        };
-
-        PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);
+        PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);    //绘制属性
         if (paintInfo != null)
             mPaintInfo = paintInfo;
         else
             mPaintInfo = new PaintInfo();
-        mLineHeight = mPaintInfo.textSize * 1.5f;
-        mLineCount = (int) (mVisibleHeight / mLineHeight) - 1;
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setTextAlign(Paint.Align.LEFT);
+        mLineHeight = mPaintInfo.textSize * 1.5f;   //每行的高度
+        mLineCount = (int) (mVisibleHeight / mLineHeight) - 1;  //一页能容纳的行数
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  //绘图对象，抗锯齿
+        mPaint.setTextAlign(Paint.Align.LEFT);      //文本左对齐
 
-        mPaint.setColor(mPaintInfo.textColor);
-        mPaint.setTextSize(mPaintInfo.textSize);
-        mPaint.setTypeface(mTypefaceList.get(mPaintInfo.typeIndex));
+        mPaint.setColor(mPaintInfo.textColor);      //绘图颜色
+        mPaint.setTextSize(mPaintInfo.textSize);    //文字大小
+        mPaint.setTypeface(Typeface.DEFAULT);       //字体，使用默认字体
 
-        ReadInfo info = SaveHelper.getObject(mContext, mBookId + SaveHelper.DRAW_INFO);
+        ReadInfo info = SaveHelper.getObject(mContext, mBookId + SaveHelper.DRAW_INFO); //阅读信息
         if (info != null)
             mReadInfo = info;
         else
             mReadInfo = new ReadInfo();
     }
 
+    //绘制下一页
     public Bitmap drawNextPage(float powerPercent) {
         if (!mReadInfo.isLastNext) {
             pageDown();
@@ -152,7 +146,7 @@ public class BookPageFactory {
         return bitmap;
     }
 
-
+    //绘制上一页
     public Bitmap drawPrePage(float powerPercent) {
         if (mReadInfo.isLastNext) {
             pageUp();
@@ -181,6 +175,7 @@ public class BookPageFactory {
         return bitmap;
     }
 
+    //通过目录跳转到指定章节
     public List<Bitmap> updatePagesByContent(int nextParaIndex, float powerPercent) {
         mReadInfo.nextParaIndex = nextParaIndex;
 
@@ -195,17 +190,14 @@ public class BookPageFactory {
         return bitmaps;
     }
 
+    //修改主题
     public List<Bitmap> updateTheme(int theme, float powerPercent) {
         mPaintInfo.bgColor = mBgColors[theme];
         mPaintInfo.textColor = mTextColors[theme];
         return drawCurTwoPages(powerPercent);
     }
 
-    public List<Bitmap> updateTypeface(int typeIndex, float powerPercent) {
-        mPaintInfo.typeIndex = typeIndex;
-        return drawCurTwoPages(powerPercent);
-    }
-
+    //修改字体大小
     public List<Bitmap> updateTextSize(int textSize, float powerPercent) {
         mPaintInfo.textSize = textSize;
         mLineHeight = textSize * 1.5f;
@@ -213,16 +205,18 @@ public class BookPageFactory {
         return drawCurTwoPages(powerPercent);
     }
 
+    //修改字体颜色
     public List<Bitmap> updateTextColor(int textColor, float powerPercent) {
         mPaintInfo.textColor = textColor;
         return drawCurTwoPages(powerPercent);
     }
 
+    //绘制最近的两页
     public List<Bitmap> drawCurTwoPages(float powerPercent) {
         setIndexToCurStart();
-        mPaint.setColor(mPaintInfo.textColor);
-        mPaint.setTextSize(mPaintInfo.textSize);
-        mPaint.setTypeface(mTypefaceList.get(mPaintInfo.typeIndex));
+        mPaint.setColor(mPaintInfo.textColor);  //绘图颜色
+        mPaint.setTextSize(mPaintInfo.textSize);//文字大小
+        mPaint.setTypeface(Typeface.DEFAULT);   //字体
         List<Bitmap> bitmaps = new ArrayList<>();
         if (mReadInfo.isLastNext) {
             bitmaps.add(drawNextPage(powerPercent));
@@ -234,6 +228,7 @@ public class BookPageFactory {
         return bitmaps;
     }
 
+    //设置索引起点
     private void setIndexToCurStart() {
         if (mReadInfo.isLastNext) {
             pageUp();
@@ -277,7 +272,8 @@ public class BookPageFactory {
         }
     }
 
-    private String findContent(int paraIndex) {    //找到当前page对应的目录
+    //找到当前page对应的目录
+    private String findContent(int paraIndex) {
         for (int i = 0; i < mContentParaIndex.size() - 1; i++) {
             if (paraIndex >= mContentParaIndex.get(i) && paraIndex < mContentParaIndex.get(i + 1)) {
                 if (i == 0)
@@ -288,8 +284,8 @@ public class BookPageFactory {
         return mContents.get(mContentParaIndex.size() - 1);
     }
 
+    //绘图信息
     private void drawInfo(Canvas canvas, float powerPercent) {
-
         Paint infoPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         infoPaint.setTextAlign(Paint.Align.LEFT);
         infoPaint.setTextSize(32);
@@ -345,16 +341,17 @@ public class BookPageFactory {
         canvas.drawRect(rectF, infoPaint);
     }
 
+    //获取下一页的lines
     private List<String> getNextPageLines() {
         String string = "";
         List<String> lines = new ArrayList<>();
-        if (mReadInfo.isNextRes) {
+        if (mReadInfo.isNextRes) {  //往后读还剩余字符串
             lines.addAll(mReadInfo.nextResLines);
-            mReadInfo.nextResLines.clear();
+            mReadInfo.nextResLines.clear(); //上一次向后读剩余的lines清空
             mReadInfo.isNextRes = false;
         }
 
-        if (mReadInfo.nextParaIndex >= mParaListSize) {
+        if (mReadInfo.nextParaIndex >= mParaListSize) { //即将读取的段落的索引在文本末
             return lines;
         }
 
@@ -380,7 +377,7 @@ public class BookPageFactory {
         return lines;
     }
 
-
+    //获取上一页的lines
     private List<String> getPrePageLines() {
         String string = "";
         List<String> lines = new ArrayList<>();
@@ -470,6 +467,7 @@ public class BookPageFactory {
         }
     }
 
+    //重置
     private void reset() {
         mReadInfo.preResLines.clear();
         mReadInfo.isPreRes = false;

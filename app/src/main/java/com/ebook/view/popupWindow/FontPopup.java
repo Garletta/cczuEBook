@@ -31,6 +31,11 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
 
     private OnFontSelectedListener mListener;
 
+    @Override
+    public void onClick(View view) {
+
+    }
+
     public interface OnFontSelectedListener {
         void onTypefaceSelected(int typeIndex);
 
@@ -56,9 +61,6 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
     private void initEvents() {
         //设置初始状态
         PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);
-        if (paintInfo != null) {
-            mTypeIndex = paintInfo.typeIndex;
-        }
         setUsedButton();
         for (int i = 0; i < mTexts.length; i++) {
             mTexts[i].setTypeface(mTypefaceList.get(i));
@@ -68,24 +70,6 @@ public class FontPopup extends BasePopupWindow implements View.OnClickListener {
         }
         for (FloatingActionButton fab : mFabs) {
             fab.setOnClickListener(this);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        int typeIndex = mTypeIndex;
-        int color = 0;
-        for (int i = 0; i < mButtons.length; i++) {
-            if (v.getId() == mButtons[i].getId()) {
-                typeIndex = i;
-                break;
-            }
-        }
-        for (int i = 0; i < mFabs.length; i++) {
-            if (v.getId() == mFabs[i].getId()) {
-                color = mTextColors[i];
-                break;
-            }
         }
     }
 

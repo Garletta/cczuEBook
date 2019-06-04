@@ -294,7 +294,6 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
         mFontPopup.setOnFontSelectedListener(new FontPopup.OnFontSelectedListener() {
             @Override
             public void onTypefaceSelected(int typeIndex) {
-                mPageList = mBookPageFactory.updateTypeface(typeIndex, mPowerPercent);
                 mFlipView.updateBitmapList(mPageList);
             }
             @Override

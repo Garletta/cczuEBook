@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 
 public class SaveHelper {
+
     public static final String THEME = "SettingPopup_Theme";
     public static final String FLIP_STYLE = "SettingPopup_FlipStyle";
     public static final String DRAW_INFO = "BookPageFactory_draw_info";
@@ -64,7 +65,7 @@ public class SaveHelper {
     public static <T> T getObject(Context context, String key) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         if (sp.contains(key)){
-            String objectStr =sp.getString(key, null);
+            String objectStr = sp.getString(key, null);
             T t = deserObject(objectStr);
             return t;
         }
