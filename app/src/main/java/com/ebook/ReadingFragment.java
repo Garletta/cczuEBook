@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.view.LayoutInflater;
@@ -20,10 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-
 import com.ebook.model.Book;
 import com.ebook.model.BookLab;
-import com.ebook.util.ScreenBrightnessHelper;
 import com.ebook.util.bookPageUtil.BookPageFactory;
 import com.ebook.util.bookPageUtil.Label;
 import com.ebook.util.bookPageUtil.ReadInfo;
@@ -37,57 +34,56 @@ import com.ebook.view.popupWindow.SettingPopup;
 import java.util.ArrayList;
 import java.util.List;
 
+//阅读界面的fragment
 public class ReadingFragment extends Fragment implements View.OnClickListener {
     public static final String ARG_FLIP_BOOK_ID = "ARG_FLIP_BOOK_ID ";
     public static final int TEXT_SIZE_DELTA = 50;
     private Context mContext;
-    private int mBookId;
-    private Book mBook;
+    private int mBookId;                //书ID
+    private Book mBook;                 //书
     private BookPageFactory mBookPageFactory;
-    private Bitmap mPrePage;
-    private Bitmap mNextPage;
-    private List<Bitmap> mPageList = new ArrayList<>();
-    private int[] mBgColors;
-    private FlipView mFlipView;
-    private LinearLayout mBottomBar;
-    private Button[] mBottomBtns;
-    private SettingPopup mSettingPopup;
-    private ContentPopup mContentPopup;
-    private FontPopup mFontPopup;
-    private LabelPopup mLabelPopup;
-    private boolean isBottomBarShow = true;
-    private boolean isFirstRead = true;//是否是第一次进入
-    private float mBackgroundAlpha = 1.0f;
-    private float mPowerPercent; //当前电池电量百分比
-    private BatteryPowerReceiver mBatteryReceiver;//电池电量广播接收者
+    private Bitmap mPrePage;            //上一页
+    private Bitmap mNextPage;           //下一页
+    private List<Bitmap> mPageList = new ArrayList<>(); //页
+    private int[] mBgColors;            //背景色
+    private FlipView mFlipView;         //翻页视图
+    private LinearLayout mBottomBar;    //底部工具条
+    private Button[] mBottomBtns;       //底部按钮集合
+    private ContentPopup mContentPopup; //目录弹窗
+    private SettingPopup mSettingPopup; //设置弹窗
+    private FontPopup mFontPopup;       //字体弹窗
+    private LabelPopup mLabelPopup;     //标签弹窗
+    private boolean isBottomBarShow = true; //是否显示底部工具条
+    private boolean isFirstRead = true;     //是否是第一次进入
+    private float mBackgroundAlpha = 1.0f;  //最初背景
+    private float mPowerPercent;            //当前电池电量百分比
+    private BatteryPowerReceiver mBatteryReceiver;  //电池电量广播接收者
 
     private Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(Message msg) {    //主线程传消息到子线程
             WindowManager.LayoutParams layoutParams = getActivity().getWindow().getAttributes();
             layoutParams.alpha = (Float) msg.obj;
             getActivity().getWindow().setAttributes(layoutParams);
-
         }
     };
 
     public static ReadingFragment newInstance(int bookId) {
         Bundle args = new Bundle();
-        args.putInt(ARG_FLIP_BOOK_ID, bookId);
+        args.putInt(ARG_FLIP_BOOK_ID, bookId);  //存储bookId到Bundle
         ReadingFragment fragment = new ReadingFragment();
-        fragment.setArguments(args);
-        return fragment;
+        fragment.setArguments(args);            //通过fragment传递参数，即bookId
+        return fragment;                        //返回阅读界面
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initDatas();
+        initDatas();    //初始化数据
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_reading_layout, container, false);
         initViews(v);
         initEvents();

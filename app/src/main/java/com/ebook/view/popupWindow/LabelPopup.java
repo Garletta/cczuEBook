@@ -77,7 +77,6 @@ public class LabelPopup extends BasePopupWindow {
             super(itemView);
             mDetails = (TextView) itemView.findViewById(R.id.label_popup_details);
             mProgress = (TextView) itemView.findViewById(R.id.label_popup_progress);
-            mTime = (TextView) itemView.findViewById(R.id.label_popup_time);
             itemView.setOnClickListener(this);
         }
         public void bind(Label label) {

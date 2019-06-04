@@ -18,14 +18,16 @@ import com.ebook.model.BookLab;
 import java.util.ArrayList;
 import java.util.List;
 
+//书架的fragment
 public class ShelfFragment extends Fragment {
+
     private Context mContext;
-    private List<Book> mBookList;
+    private List<Book> mBookList;   //书单
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_shelf_layout, container, false);
+        View v = inflater.inflate(R.layout.fragment_shelf_layout, container, false);    //书架视图
         initEvents(v);
         return v;
     }

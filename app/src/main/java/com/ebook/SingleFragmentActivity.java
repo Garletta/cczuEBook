@@ -8,21 +8,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
+//简单的fragment页面
 public abstract class SingleFragmentActivity extends AppCompatActivity {
-
-    //返回托管的fragment
-    protected abstract Fragment createFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setScreen();
-        setContentView(R.layout.activity_fragment);
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-        if (fragment == null) {
+        setScreen();    //设置屏幕显示状态
+        setContentView(R.layout.activity_fragment); //设置对应的视图页面
+        FragmentManager fm = getSupportFragmentManager();   //fragment管理器
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);   //利用fragment管理器的findFragmentById方法获得视图的控件
+        if (fragment == null) { //如果找不到指定的控件，则调用createFragment方法
             fragment = createFragment();
-            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
+            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();  //fragment管理器打开事务，添加指定控件，提交
         }
     }
 
@@ -30,4 +28,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
     protected void setScreen() {
 
     }
+
+    //返回托管的fragment
+    protected abstract Fragment createFragment();
 }

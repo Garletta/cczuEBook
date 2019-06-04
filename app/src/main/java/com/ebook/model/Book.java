@@ -10,12 +10,12 @@ import java.util.regex.Pattern;
 public class Book {
 
     private static final String TAG = "Book";
-    private String mBookTitle;
-    private Bitmap mBookCover;
-    private List<String> mParagraphList;//格式化文本，将文本以段落为单位保存
-    private List<String> mBookContents;//目录集合(卷/章/回/集等)
-    private List<Integer> mContentParaIndexs;//目录对应的在段落集合中的索引
-    private String mSpace = "\t\t\t\t\t\t";//空两格
+    private String mBookTitle;  //书名
+    private Bitmap mBookCover;  //封面
+    private List<String> mParagraphList;        //格式化文本，将文本以段落为单位保存
+    private List<String> mBookContents;         //目录集合(卷/章/回/集等)
+    private List<Integer> mContentParaIndexs;   //目录对应的在段落集合中的索引
+    private String mSpace = "\t\t\t\t\t\t";     //首行缩进
 
     public Book(String bookTitle, Bitmap bookCover, String fullText) {
         mBookTitle = bookTitle;
@@ -35,10 +35,11 @@ public class Book {
         String[] paragraphs = text.split("\\s{2,}");
         //格式化段落
         for (int i = 0; i < paragraphs.length; i++) {
-            if (paragraphs[i].isEmpty()) {
+            if (paragraphs[i].isEmpty()) {  //无视空段，空行
                 continue;
             }
-            if (isFirstParas) {
+            //paragraph = mSpace + paragraphs[i] + "\n";
+            if (isFirstParas) {     //段首，增加缩进
                 paragraph = mSpace + paragraphs[i];
                 isFirstParas = false;
             } else {
