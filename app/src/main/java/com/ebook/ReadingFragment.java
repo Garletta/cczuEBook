@@ -51,7 +51,6 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
     private Button[] mBottomBtns;       //底部按钮集合
     private ContentPopup mContentPopup; //目录弹窗
     private SettingPopup mSettingPopup; //设置弹窗
-    private FontPopup mFontPopup;       //字体弹窗
     private LabelPopup mLabelPopup;     //标签弹窗
     private boolean isBottomBarShow = true; //是否显示底部工具条
     private boolean isFirstRead = true;     //是否是第一次进入
@@ -127,11 +126,6 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
                 int yOff = -mSettingPopup.getHeight() - mBottomBar.getHeight() / 6;
                 mSettingPopup.setAnimationStyle(R.style.pop_window_anim_style);
                 mSettingPopup.showAsDropDown(mBottomBar, xOff, yOff);
-                break;
-            case R.id.button_font:
-                mFontPopup.setAnimationStyle(R.style.pop_window_anim_style);
-                mFontPopup.showAsDropDown(mBottomBar, 0, -mFontPopup.getHeight());
-                lightOff();
                 break;
             case R.id.button_label:
                 saveLabel();
@@ -243,14 +237,6 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        mFontPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                lightOn();
-                hideBottomBar();
-            }
-        });
-
         mLabelPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -322,7 +308,6 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
         };
         mContentPopup = new ContentPopup(mContext, mBook);
         mSettingPopup = new SettingPopup(mContext);
-        mFontPopup = new FontPopup(mContext);
         mLabelPopup = new LabelPopup(mContext, mBookId);
     }
 

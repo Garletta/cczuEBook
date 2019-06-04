@@ -17,10 +17,10 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         setScreen();    //设置屏幕显示状态
         setContentView(R.layout.activity_fragment); //设置对应的视图页面
         FragmentManager fm = getSupportFragmentManager();   //fragment管理器
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);   //利用fragment管理器的findFragmentById方法获得视图的控件
-        if (fragment == null) { //如果找不到指定的控件，则调用createFragment方法
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);   //利用fragment管理器的findFragmentById方法获得视图的容器
+        if (fragment == null) { //如果找不到指定的容器，则调用createFragment方法
             fragment = createFragment();
-            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();  //fragment管理器打开事务，添加指定控件，提交
+            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();  //fragment管理器打开事务，添加指定容器，提交
         }
     }
 

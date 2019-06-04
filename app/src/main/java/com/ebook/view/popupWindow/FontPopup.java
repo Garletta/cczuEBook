@@ -20,16 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FontPopup extends BasePopupWindow {
-    public static final String FONTS = "fonts";
-
-    private List<Typeface> mTypefaceList = new ArrayList<>();
-    private TextView[] mTexts;
-    private Button[] mButtons;
-
-    public interface OnFontSelectedListener {
-        void onTypefaceSelected(int typeIndex);
-        void onColorSelected(int color);
-    }
 
     @Override
     protected View createConvertView() {
@@ -38,18 +28,5 @@ public class FontPopup extends BasePopupWindow {
 
     public FontPopup(Context context) {
         super(context);
-        initViews();
-        initEvents();
-    }
-
-    private void initViews() {
-        mTexts = new TextView[]{
-                (TextView) mConvertView.findViewById(R.id.text_system),
-        };
-    }
-
-    private void initEvents() {
-        //设置初始状态
-        PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);
     }
 }
