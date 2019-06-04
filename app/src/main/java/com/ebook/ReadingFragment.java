@@ -291,18 +291,6 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        mFontPopup.setOnFontSelectedListener(new FontPopup.OnFontSelectedListener() {
-            @Override
-            public void onTypefaceSelected(int typeIndex) {
-                mFlipView.updateBitmapList(mPageList);
-            }
-            @Override
-            public void onColorSelected(int color) {
-                mPageList = mBookPageFactory.updateTextColor(color, mPowerPercent);
-                mFlipView.updateBitmapList(mPageList);
-            }
-        });
-
         mLabelPopup.setOnLabelClicked(new LabelPopup.OnLabelSelectedListener() {
             @Override
             public void OnLabelClicked(Label label) {

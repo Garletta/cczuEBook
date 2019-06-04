@@ -23,14 +23,5 @@
             android:text="系统默认字体"
             android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/btn_system"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/btn_font"
-            android:text="点击使用"
-            android:textColor="@color/stroke_color_light_normal"/>
-
     </LinearLayout>
 </LinearLayout>
