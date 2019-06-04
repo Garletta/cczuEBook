@@ -27,9 +27,8 @@ import com.ebook.util.bookPageUtil.ReadInfo;
 import com.ebook.util.SaveHelper;
 import com.ebook.view.FlipView;
 import com.ebook.view.popupWindow.ContentPopup;
-import com.ebook.view.popupWindow.FontPopup;
-import com.ebook.view.popupWindow.LabelPopup;
 import com.ebook.view.popupWindow.SettingPopup;
+import com.ebook.view.popupWindow.LabelPopup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -209,7 +208,7 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
             button.setOnClickListener(this);
         }
 
-        mBottomBtns[3].setOnLongClickListener(new View.OnLongClickListener() {
+        mBottomBtns[2].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 mLabelPopup.updateUI(); //刷新书签列表
@@ -303,7 +302,6 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
         mBottomBtns = new Button[]{
                 (Button) v.findViewById(R.id.button_content),
                 (Button) v.findViewById(R.id.button_setting),
-                (Button) v.findViewById(R.id.button_font),
                 (Button) v.findViewById(R.id.button_label)
         };
         mContentPopup = new ContentPopup(mContext, mBook);

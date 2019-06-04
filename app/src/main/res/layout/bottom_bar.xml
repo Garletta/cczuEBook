@@ -30,16 +30,6 @@
         />
 
     <Button
-        android:id="@+id/button_font"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_weight="1"
-        android:background="@drawable/btn_bottom_bar"
-        android:text="字体"
-        />
-
-    <Button
         android:id="@+id/button_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
