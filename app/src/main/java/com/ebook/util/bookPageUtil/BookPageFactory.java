@@ -4,9 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
@@ -15,7 +13,9 @@ import com.ebook.model.BookLab;
 import com.ebook.util.SaveHelper;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 //书页工厂
@@ -97,133 +97,148 @@ public class BookPageFactory {
         };
 
         PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);    //绘制属性
-        if (paintInfo != null)
-            mPaintInfo = paintInfo;
-        else
-            mPaintInfo = new PaintInfo();
+        mPaintInfo = (paintInfo != null) ? paintInfo : new PaintInfo();
         mLineHeight = mPaintInfo.textSize * 1.5f;   //每行的高度
         mLineCount = (int) (mVisibleHeight / mLineHeight) - 1;  //一页能容纳的行数
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);  //绘图对象，抗锯齿
-        mPaint.setTextAlign(Paint.Align.LEFT);      //文本左对齐
-
-        mPaint.setColor(mPaintInfo.textColor);      //绘图颜色
-        mPaint.setTextSize(mPaintInfo.textSize);    //文字大小
+        mPaint.setTextAlign(Paint.Align.LEFT);       //文本左对齐
+        mPaint.setColor(mPaintInfo.textColor);     //绘图颜色
+        mPaint.setTextSize(mPaintInfo.textSize);   //文字大小
         mPaint.setTypeface(Typeface.DEFAULT);       //字体，使用默认字体
 
         ReadInfo info = SaveHelper.getObject(mContext, mBookId + SaveHelper.DRAW_INFO); //阅读信息
-        if (info != null)
-            mReadInfo = info;
-        else
-            mReadInfo = new ReadInfo();
+        mReadInfo = (info != null) ? info : new ReadInfo();
+    }
+
+    //通过目录跳转到指定章节
+    public List<Bitmap> updatePagesByContent(int nextParaIndex) {
+        mReadInfo.nextParaIndex = nextParaIndex;
+        if (mReadInfo.nextParaIndex == 1)    //第一章和卷名一起处理
+            mReadInfo.nextParaIndex = 0;
+        reset();
+        mReadInfo.isLastNext = true;//设置为直接往后读
+        List<Bitmap> bitmaps = new ArrayList<>();
+        bitmaps.add(drawNextPage());
+        bitmaps.add(drawNextPage());
+        return bitmaps;
     }
 
     //绘制下一页
-    public Bitmap drawNextPage(float powerPercent) {
+    public Bitmap drawNextPage() {
         if (!mReadInfo.isLastNext) {
             pageDown();
             mReadInfo.isLastNext = true;
         }
-
         Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(mPaintInfo.bgColor);
-        //下一页
-        mPageLines = getNextPageLines();
-        //已经到最后一页了
-        if (mPageLines.size() == 0 || mPageLines == null) {
+        mPageLines = getNextPageLines();    //下一页
+        if (mPageLines.size() == 0 || mPageLines == null) { //已经到最后一页了
             return null;
         }
-
         float y = mPaintInfo.textSize;
-
         for (String strLine : mPageLines) {
             y += mLineHeight;
             canvas.drawText(strLine, marginWidth, y, mPaint);
         }
-
-        //绘制显示在底部的信息
-        drawInfo(canvas, powerPercent);
+        drawInfo(canvas);   //绘制显示在顶部和底部的信息
         return bitmap;
     }
 
+    //向后移动两页的距离
+    private void pageDown() {
+        mReadInfo.nextParaIndex += 1;   //移动到最后已读的段落
+        String string = "";
+        List<String> lines = new ArrayList<>();
+        int totalLines = 2 * mLineCount + mReadInfo.preResLines.size();
+        reset();
+        while (lines.size() < totalLines && mReadInfo.nextParaIndex < mParaListSize) {
+            string = mParaList.get(mReadInfo.nextParaIndex);
+            mReadInfo.nextParaIndex++;
+            while (string.length() > 0) {
+                //检测一行能够显示多少字
+                int size = mPaint.breakText(string, true, mVisibleWidth, null);
+                lines.add(string.substring(0, size));
+                string = string.substring(size);
+            }
+        }
+        while (lines.size() > totalLines) {
+            mReadInfo.isNextRes = true;
+            int end = lines.size() - 1;
+            mReadInfo.nextResLines.add(0, lines.get(end));
+            lines.remove(end);
+        }
+    }
+
+    //绘图信息
+    private void drawInfo(Canvas canvas) {
+        Paint infoPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        infoPaint.setTextAlign(Paint.Align.LEFT);
+        infoPaint.setTextSize(32);
+        infoPaint.setColor(0xff5c5c5c);
+        //当前page对应的目录
+        canvas.drawText(mCurContent, marginWidth, 2f * marginHeight, infoPaint);
+        //阅读进度
+        float percent = mReadInfo.nextParaIndex * 1.0f / mParaListSize;
+        DecimalFormat df = new DecimalFormat("#0.00");
+        percentStr = df.format(percent * 100) + "%";
+        canvas.drawText(percentStr, marginWidth, mHeight - marginHeight, infoPaint);
+        //当前系统时间
+        SimpleDateFormat sDF = new SimpleDateFormat("HH:mm");
+        String timeNow = sDF.format(new Date());
+        canvas.drawText(timeNow, mWidth - 3f * marginWidth, mHeight - marginHeight, infoPaint);
+    }
+
     //绘制上一页
-    public Bitmap drawPrePage(float powerPercent) {
+    public Bitmap drawPrePage() {
         if (mReadInfo.isLastNext) {
             pageUp();
             mReadInfo.isLastNext = false;
         }
-
         Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(mPaintInfo.bgColor);
-
-        //下一页
-        mPageLines = getPrePageLines();
-        //已经到第一页了
-        if (mPageLines.size() == 0 || mPageLines == null) {
+        mPageLines = getPrePageLines(); //下一页
+        if (mPageLines.size() == 0 || mPageLines == null) { //已经到第一页了
             return null;
         }
-
         float y = mPaintInfo.textSize;
-
         for (String strLine : mPageLines) {
             y += mLineHeight;
             canvas.drawText(strLine, marginWidth, y, mPaint);
         }
-        //绘制显示的信息
-        drawInfo(canvas, powerPercent);
+        drawInfo(canvas);   //绘制显示在顶部和底部的信息
         return bitmap;
     }
 
-    //通过目录跳转到指定章节
-    public List<Bitmap> updatePagesByContent(int nextParaIndex, float powerPercent) {
-        mReadInfo.nextParaIndex = nextParaIndex;
-
-        if (mReadInfo.nextParaIndex == 1)    //第一章和卷名一起处理
-            mReadInfo.nextParaIndex = 0;
-        reset();
-
-        mReadInfo.isLastNext = true;//设置为直接往后读
-        List<Bitmap> bitmaps = new ArrayList<>();
-        bitmaps.add(drawNextPage(powerPercent));
-        bitmaps.add(drawNextPage(powerPercent));
-        return bitmaps;
-    }
-
     //修改主题
-    public List<Bitmap> updateTheme(int theme, float powerPercent) {
+    public List<Bitmap> updateTheme(int theme) {
         mPaintInfo.bgColor = mBgColors[theme];
         mPaintInfo.textColor = mTextColors[theme];
-        return drawCurTwoPages(powerPercent);
+        return drawCurTwoPages();
     }
 
     //修改字体大小
-    public List<Bitmap> updateTextSize(int textSize, float powerPercent) {
+    public List<Bitmap> updateTextSize(int textSize) {
         mPaintInfo.textSize = textSize;
         mLineHeight = textSize * 1.5f;
         mLineCount = (int) (mVisibleHeight / mLineHeight) - 1;
-        return drawCurTwoPages(powerPercent);
-    }
-
-    //修改字体颜色
-    public List<Bitmap> updateTextColor(int textColor, float powerPercent) {
-        mPaintInfo.textColor = textColor;
-        return drawCurTwoPages(powerPercent);
+        return drawCurTwoPages();
     }
 
     //绘制最近的两页
-    public List<Bitmap> drawCurTwoPages(float powerPercent) {
+    public List<Bitmap> drawCurTwoPages() {
         setIndexToCurStart();
         mPaint.setColor(mPaintInfo.textColor);  //绘图颜色
         mPaint.setTextSize(mPaintInfo.textSize);//文字大小
         mPaint.setTypeface(Typeface.DEFAULT);   //字体
         List<Bitmap> bitmaps = new ArrayList<>();
         if (mReadInfo.isLastNext) {
-            bitmaps.add(drawNextPage(powerPercent));
-            bitmaps.add(drawNextPage(powerPercent));
+            bitmaps.add(drawNextPage());
+            bitmaps.add(drawNextPage());
         } else {
-            bitmaps.add(drawPrePage(powerPercent));
-            bitmaps.add(0, drawPrePage(powerPercent));
+            bitmaps.add(drawPrePage());
+            bitmaps.add(0, drawPrePage());
         }
         return bitmaps;
     }
@@ -282,63 +297,6 @@ public class BookPageFactory {
             }
         }
         return mContents.get(mContentParaIndex.size() - 1);
-    }
-
-    //绘图信息
-    private void drawInfo(Canvas canvas, float powerPercent) {
-        Paint infoPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        infoPaint.setTextAlign(Paint.Align.LEFT);
-        infoPaint.setTextSize(32);
-        infoPaint.setColor(0xff5c5c5c);
-
-        float offsetY = mHeight - marginHeight;
-
-        //当前page对应的目录
-        canvas.drawText(mCurContent, marginWidth, marginHeight, infoPaint);
-
-        //阅读进度
-        float percent = mReadInfo.nextParaIndex * 1.0f / mParaListSize;
-        DecimalFormat df = new DecimalFormat("#0.00");
-        percentStr = df.format(percent * 100) + "%";
-        canvas.drawText(percentStr, marginWidth, offsetY, infoPaint);
-
-        //当前系统时间
-        Time time = new Time();
-        time.setToNow(); // 取得系统时间。
-        int hour = time.hour;    // 0-23
-        int minute = time.minute;
-        String timeStr = "";
-        if (minute < 10) {
-            timeStr = hour + ":0" + minute;
-        } else {
-            timeStr = hour + ":" + minute;
-        }
-        canvas.drawText(timeStr, mWidth - 7f * marginWidth, offsetY, infoPaint);
-
-        //电池电量
-        infoPaint.reset();
-        infoPaint.setStyle(Paint.Style.STROKE);
-        infoPaint.setStrokeWidth(1);
-        infoPaint.setColor(0xff5c5c5c);
-
-        float left = mWidth - 3.8f * marginWidth;
-        float right = mWidth - 2.2f * marginWidth;
-        float height = 0.8f * marginHeight;
-
-        //电池左边部分外框
-        RectF rectF = new RectF(left, offsetY - height, right, offsetY);
-        canvas.drawRect(rectF, infoPaint);
-
-        //电池左边部分内部电量区域
-        infoPaint.setStyle(Paint.Style.FILL);
-
-        float width = (right - left) * powerPercent;
-        rectF = new RectF(left + 1.5f, offsetY - height + 1.5f, left + width - 1.5f, offsetY - 1.5f);
-        canvas.drawRect(rectF, infoPaint);
-
-        //电池右边小矩形
-        rectF = new RectF(right, offsetY - 0.7f * height, right + 0.2f * marginWidth, offsetY - 0.3f * height);
-        canvas.drawRect(rectF, infoPaint);
     }
 
     //获取下一页的lines
@@ -405,39 +363,12 @@ public class BookPageFactory {
             }
             lines.addAll(0, paraLines);
         }
-
         while (lines.size() > mLineCount) {
             mReadInfo.isPreRes = true;
             mReadInfo.preResLines.add(lines.get(0));
             lines.remove(0);
         }
         return lines;
-    }
-
-    //向后移动两页的距离
-    private void pageDown() {
-        mReadInfo.nextParaIndex += 1;//移动到最后已读的段落
-        String string = "";
-        List<String> lines = new ArrayList<>();
-        int totalLines = 2 * mLineCount + mReadInfo.preResLines.size();
-        reset();
-        while (lines.size() < totalLines && mReadInfo.nextParaIndex < mParaListSize) {
-            string = mParaList.get(mReadInfo.nextParaIndex);
-            mReadInfo.nextParaIndex++;
-            while (string.length() > 0) {
-                //检测一行能够显示多少字
-                int size = mPaint.breakText(string, true, mVisibleWidth, null);
-                lines.add(string.substring(0, size));
-                string = string.substring(size);
-            }
-        }
-
-        while (lines.size() > totalLines) {
-            mReadInfo.isNextRes = true;
-            int end = lines.size() - 1;
-            mReadInfo.nextResLines.add(0, lines.get(end));
-            lines.remove(end);
-        }
     }
 
     //向前移动两页的距离
@@ -459,7 +390,6 @@ public class BookPageFactory {
             }
             lines.addAll(0, paraLines);
         }
-
         while (lines.size() > totalLines) {
             mReadInfo.isPreRes = true;
             mReadInfo.preResLines.add(lines.get(0));
