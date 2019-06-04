@@ -21,32 +21,33 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+//书页工厂
 public class BookPageFactory {
-    private Context mContext;
-    private int mWidth;
-    private int mHeight;
-    private int marginWidth;
-    private int marginHeight;
+
+    private Context mContext;   //数据传递
+    private int mWidth;         //屏幕宽
+    private int mHeight;        //屏幕高
+    private int marginWidth;    //边宽
+    private int marginHeight;   //边高
     private int mBookId;
 
-    //绘制正文区域
-    private float mVisibleWidth;
-    private float mVisibleHeight;
+    private float mVisibleWidth;    //正文区域宽
+    private float mVisibleHeight;   //正文区域高
 
-    private float mLineHeight; //行高
-    private int mLineCount; //一页能容纳的行数
+    private float mLineHeight;      //行高
+    private int mLineCount;         //一页能容纳的行数
 
     private List<String> mParaList; //文本段落集合
-    private List<String> mContents;    //目录集合(卷/章/回/集等)
-    private List<Integer> mContentParaIndex;   //目录对应的在段落集合中的索引
+    private List<String> mContents; //目录集合(卷/章/回/集等)
+    private List<Integer> mContentParaIndex;    //目录对应的在段落集合中的索引
     private int mParaListSize;
 
     private List<String> mPageLines = new ArrayList<>();
-    private String mCurContent;//当前page对应的目录
+    private String mCurContent;     //当前page对应的目录
     private Paint mPaint;
 
-    private int[] mBgColors;
-    private int[] mTextColors;
+    private int[] mBgColors;        //书页背景颜色
+    private int[] mTextColors;      //书页文本颜色
 
     private List<Typeface> mTypefaceList = new ArrayList<>();
 
@@ -57,9 +58,23 @@ public class BookPageFactory {
     public BookPageFactory(Context context, int bookId) {
         mContext = context;
         mBookId = bookId;
-        calWidthAndHeight();
-        getFontFromAssets();
+        calWidthAndHeight();    //获取屏幕的宽高
+        getFontFromAssets();    //从assets资源文件获取字体
         initDatas();
+    }
+
+    //获取屏幕的宽高
+    private void calWidthAndHeight() {
+        WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        mWidth = metrics.widthPixels;
+        mHeight = metrics.heightPixels;
+    }
+
+    //从assets资源文件获取字体
+    private void getFontFromAssets() {
+        mTypefaceList.add(Typeface.DEFAULT);
     }
 
     private void initDatas() {
@@ -460,32 +475,6 @@ public class BookPageFactory {
         mReadInfo.isPreRes = false;
         mReadInfo.nextResLines.clear();
         mReadInfo.isNextRes = false;
-    }
-
-    //获取屏幕的宽高
-    private void calWidthAndHeight() {
-        WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics metrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        mWidth = metrics.widthPixels;
-        mHeight = metrics.heightPixels;
-    }
-
-    private void getFontFromAssets() {
-        mTypefaceList.add(Typeface.DEFAULT);
-        String[] fontNameList = null;
-        AssetManager assetManager = mContext.getAssets();
-        try {
-            fontNameList = assetManager.list(FontPopup.FONTS);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        for (int i = 0; i < fontNameList.length; i++) {
-            String fontPath = FontPopup.FONTS + "/" + fontNameList[i];
-            Typeface typeface = Typeface.createFromAsset(assetManager, fontPath);//根据路径得到Typeface
-            mTypefaceList.add(typeface);
-        }
     }
 
     public ReadInfo getReadInfo() {

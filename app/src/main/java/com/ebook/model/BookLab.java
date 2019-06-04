@@ -13,26 +13,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookLab {
-    public static final String TEXT = "text";
-    public static final String IMAGE = "image";
+    public static final String TEXT = "text";   //书所在文件夹名
+    public static final String IMAGE = "image"; //封面所在文件夹名
+
     private static BookLab sBookLab;    //书架上的书
 
     private AssetManager mAssetManager; //资源管理器
     private List<Book> mBookList;       //书单
-    //assets中的文件名清单
     private String[] mAssetsImageList;  //资源文件中的封面
     private String[] mAssetsTextList;   //资源文件中的书
 
     private BookLab(Context context) {
-        mAssetManager = context.getAssets();
-        loadAssetsFiles();
+        mAssetManager = context.getAssets();    //获得assets资源文件
+        loadAssetsFiles();  //加载assets中的文件
     }
 
     public static BookLab newInstance(Context context) {
         if (sBookLab == null) { //书架上没有书则返回空架
             sBookLab = new BookLab(context);
         }
-        return sBookLab;
+        return sBookLab;    //返回书架上的书
     }
 
     //加载assets中的文件
@@ -44,18 +44,18 @@ public class BookLab {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (int i = 0; i < mAssetsTextList.length; i++) {
+        for (int i = 0; i < mAssetsTextList.length; i++) {  //将资源文件中的书的信息转到mBookList书单中
             //获取书名
-            String[] nameSplit = mAssetsTextList[i].split("_");
+            String[] nameSplit = mAssetsTextList[i].split("_"); //编号和书名用"_"分割
             String nameSecond = nameSplit[nameSplit.length - 1];
-            String bookTitle = nameSecond.replace(".txt", "");
+            String bookTitle = nameSecond.replace(".txt", "");  //删除后缀
             //获取封面
             String imagePath = IMAGE + "/" + mAssetsImageList[i];
             Bitmap bookCover = loadImage(imagePath);
-            //获取文本
+            //获取正文
             String textPath = TEXT + "/" + mAssetsTextList[i];
             String bodyText = loadText(textPath);
-
+            //用获取到的信息组合成一本书，并存储到mBookList中
             Book book = new Book(bookTitle, bookCover, bodyText);
             mBookList.add(book);
         }
@@ -67,14 +67,16 @@ public class BookLab {
         InputStream in = null;
         try {
             in = mAssetManager.open(path);  //读取指定的封面
-            image = BitmapFactory.decodeStream(in); //存为bigmap类型
+            image = BitmapFactory.decodeStream(in); //存为Bigmap类型
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return image;
@@ -98,6 +100,13 @@ public class BookLab {
             if (reader != null) {
                 try {
                     reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (in != null) {
+                try {
+                    in.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

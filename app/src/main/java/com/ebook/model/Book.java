@@ -23,45 +23,31 @@ public class Book {
         mParagraphList = new ArrayList<>();
         mBookContents = new ArrayList<>();
         mContentParaIndexs = new ArrayList<>();
-        formatText(fullText);
-        findContents(mParagraphList);
+        formatText(fullText);   //格式化正文，存储到mParagraphList中
+        findContents(mParagraphList);   //找出章节、卷、回、集等标题
     }
 
     //格式化文本，将文本以段落为单位保存
     private void formatText(String text) {
-        boolean isFirstParas = true;
-        String paragraph = "";
-        //按段落切分文本
-        String[] paragraphs = text.split("\\s{2,}");
-        //格式化段落
-        for (int i = 0; i < paragraphs.length; i++) {
-            if (paragraphs[i].isEmpty()) {  //无视空段，空行
+        String[] paragraphs = text.split("\\s{2,}");    //按段落切分文本
+        for (int i = 0; i < paragraphs.length; i++) {   //格式化段落,增加首行缩进、段符，删除空行、空段
+            if (paragraphs[i].isEmpty())    //无视空段，空行
                 continue;
-            }
-            //paragraph = mSpace + paragraphs[i] + "\n";
-            if (isFirstParas) {     //段首，增加缩进
-                paragraph = mSpace + paragraphs[i];
-                isFirstParas = false;
-            } else {
-                paragraph = "\n" + mSpace + paragraphs[i];
-            }
-            mParagraphList.add(paragraph);
+            String paragraph = mSpace + paragraphs[i] + "\n";
+            mParagraphList.add(paragraph);  //将文本以段落为单位保存
         }
     }
 
+    //找出章节、卷、回、集等标题
     private void findContents(List<String> paraList) {
         //字符串匹配模式
-        String patternString = "第\\S{2,4}\\s\\S{2,}";
+        String patternString = "第\\S{2,4}\\s\\S{2,}";   //第字开头，中间有空白字符，为章节标题
         Pattern pattern = Pattern.compile(patternString);
-
         for (String para:paraList) {
-            Matcher matcher = pattern.matcher(para);
-            if (matcher.find()){
-                //除去段首多余空格
-                int start = matcher.start();
-                int end = matcher.end();
-                String subString = para.substring(start, end);
-                mBookContents.add(subString);   //目录
+            Matcher matcher = pattern.matcher(para);    //每一段中匹配正则表达式的内容
+            if (matcher.find()){    //找到
+                String subString = para.substring(matcher.start(), matcher.end());  //截取章节标题
+                mBookContents.add(subString);   //目录集合(卷/章/回/集等)
                 mContentParaIndexs.add(paraList.indexOf(para)); //目录对应的在段落集合中的索引
             }
         }
