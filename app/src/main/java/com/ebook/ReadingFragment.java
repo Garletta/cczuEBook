@@ -1,9 +1,6 @@
 package com.ebook;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,7 +32,6 @@ import java.util.List;
 //阅读界面的fragment
 public class ReadingFragment extends Fragment implements View.OnClickListener {
     public static final String ARG_FLIP_BOOK_ID = "ARG_FLIP_BOOK_ID ";
-    public static final int TEXT_SIZE_DELTA = 50;
     private Context mContext;
     private int mBookId;                //书ID
     private Book mBook;                 //书
@@ -80,13 +76,13 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
     private void initDatas() {
         mContext = getActivity();
         mBookId = getArguments().getInt(ARG_FLIP_BOOK_ID);
-        mBook = BookLab.newInstance(mContext).getBookList().get(mBookId);
+        mBook = new BookLab(mContext).getBookList().get(mBookId);
         mBookPageFactory = new BookPageFactory(mContext, mBookId);
         mBgColors = new int[]{
-                0xffe7dcbe,  //复古
-                0xffffffff,  // 常规
-                0xffcbe1cf,  //护眼
-                0xff333232  //夜间
+            0xffe7dcbe,  //复古
+            0xffffffff,  // 常规
+            0xffcbe1cf,  //护眼
+            0xff333232  //夜间
         };
     }
 
@@ -125,10 +121,8 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_content:
-                //设置出现动画和位置
                 mContentPopup.setAnimationStyle(R.style.pop_window_anim_style);
                 mContentPopup.showAsDropDown(mBottomBar, 0, -mContentPopup.getHeight());
-                lightOff();
                 break;
             case R.id.button_setting:
                 int xOff = (mBottomBar.getWidth() - mSettingPopup.getWidth()) / 2;
@@ -168,9 +162,9 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
         mFlipView = (FlipView) v.findViewById(R.id.flip_view);
         mBottomBar = (LinearLayout) v.findViewById(R.id.bottom_bar_layout);
         mBottomBtns = new Button[]{
-                (Button) v.findViewById(R.id.button_content),
-                (Button) v.findViewById(R.id.button_setting),
-                (Button) v.findViewById(R.id.button_label)
+            (Button) v.findViewById(R.id.button_content),
+            (Button) v.findViewById(R.id.button_setting),
+            (Button) v.findViewById(R.id.button_label)
         };
         mContentPopup = new ContentPopup(mContext, mBook);
         mSettingPopup = new SettingPopup(mContext);
@@ -185,8 +179,7 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
         setTheme(theme);    //阅读模式改变
         mFlipView.setOnPageFlippedListener(new FlipView.OnPageFlippedListener() {   //翻页监听
             @Override
-            public List<Bitmap> onNextPageFlipped() {
-                //向后读一页
+            public List<Bitmap> onNextPageFlipped() {   //向后读一页
                 mNextPage = mBookPageFactory.drawNextPage();
                 if (mNextPage == null)
                     return null;
@@ -195,7 +188,7 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
                 return mPageList;
             }
             @Override
-            public List<Bitmap> onPrePageFlipped() {
+            public List<Bitmap> onPrePageFlipped() {   //向前读一页
                 mPrePage = mBookPageFactory.drawPrePage();
                 if (mPrePage == null)
                     return null;
@@ -225,7 +218,6 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
                 mLabelPopup.updateUI(); //刷新书签列表
                 mLabelPopup.setAnimationStyle(R.style.pop_window_anim_style);
                 mLabelPopup.showAsDropDown(mBottomBar, 0, -mLabelPopup.getHeight());
-                lightOff();
                 return true;
             }
         });
@@ -243,14 +235,12 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
         mContentPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                lightOn();
                 hideBottomBar();
             }
         });
         mLabelPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                lightOn();
                 hideBottomBar();
             }
         });
@@ -265,7 +255,7 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
         mSettingPopup.setOnSettingChangedListener(new SettingPopup.OnSettingChangedListener() {
             @Override
             public void onSizeChanged(int progress) {
-                mPageList = mBookPageFactory.updateTextSize(progress + TEXT_SIZE_DELTA);
+                mPageList = mBookPageFactory.updateTextSize(progress + 50);
                 mFlipView.updateBitmapList(mPageList);
             }
             @Override
@@ -310,46 +300,6 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
     private void hideBottomBar() {
         mBottomBar.setVisibility(View.INVISIBLE);
         isBottomBarShow = false;
-    }
-
-    //开启一个线程，使背景内容逐渐变暗
-    private void lightOff() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-            while (mBackgroundAlpha > 0.4f) {
-                try {
-                    Thread.sleep(8);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                mBackgroundAlpha -= 0.01f;
-                Message message = mHandler.obtainMessage();
-                message.obj = mBackgroundAlpha;
-                mHandler.sendMessage(message);
-            }
-            }
-        }).start();
-    }
-
-    //开启一个线程，使背景内容逐渐变暗
-    private void lightOn() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-            while (mBackgroundAlpha < 1.0f) {
-                try {
-                    Thread.sleep(8);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                mBackgroundAlpha += 0.01f;
-                Message message = mHandler.obtainMessage();
-                message.obj = mBackgroundAlpha;
-                mHandler.sendMessage(message);
-            }
-            }
-        }).start();
     }
 }
 

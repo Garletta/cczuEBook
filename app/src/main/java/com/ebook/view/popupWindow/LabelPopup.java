@@ -71,7 +71,6 @@ public class LabelPopup extends BasePopupWindow {
     private class LabelHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mDetails;
         private TextView mProgress;
-        private TextView mTime;
         private Label mLabel;
         public LabelHolder(View itemView) {
             super(itemView);
@@ -96,19 +95,16 @@ public class LabelPopup extends BasePopupWindow {
         public LabelAdapter(List<Label> labelList) {
             this.labelList = labelList;
         }
-
         @Override
         public LabelHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View view = inflater.inflate(R.layout.item_recycler_view_label, parent, false);
             return new LabelHolder(view);
         }
-
         @Override
         public void onBindViewHolder(LabelHolder holder, int position) {
             holder.bind(labelList.get(position));
         }
-
         @Override
         public int getItemCount() {
             return labelList.size();

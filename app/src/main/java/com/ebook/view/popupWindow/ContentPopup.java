@@ -46,23 +46,20 @@ public class ContentPopup extends BasePopupWindow {
         mRecyclerView = (RecyclerView) mConvertView.findViewById(R.id.pop_contents_recycle_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setAdapter(new ContentsAdapter(mBook.getBookContents()));
-
     }
+
     private class ContentsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTextView;
         private int mPosition;
-
         public ContentsHolder(View itemView) {
             super(itemView);
             mTextView = (TextView) itemView;
             itemView.setOnClickListener(this);
         }
-
         public void bind(String content, int position) {
             mPosition = position;
             mTextView.setText(content);
         }
-
         @Override
         public void onClick(View v) {
             if (mListener != null)
@@ -72,11 +69,9 @@ public class ContentPopup extends BasePopupWindow {
 
     private class ContentsAdapter extends RecyclerView.Adapter<ContentsHolder> {
         private List<String> mBookContents;
-
         public ContentsAdapter(List<String> bookContents) {
             mBookContents = bookContents;
         }
-
         @Override
         public ContentsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -86,7 +81,6 @@ public class ContentPopup extends BasePopupWindow {
         @Override
         public void onBindViewHolder(ContentsHolder holder, int position) {
             holder.bind(mBookContents.get(position), position);
-
         }
         @Override
         public int getItemCount() {
@@ -96,6 +90,5 @@ public class ContentPopup extends BasePopupWindow {
 
     public void setBackgroundColor(int color) {
         mLinearLayout.setBackgroundColor(color);
-
     }
 }

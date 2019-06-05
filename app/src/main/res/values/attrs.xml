@@ -5,7 +5,5 @@
         <attr name="buttonColor" format="color"/>
         <attr name="state" format="boolean"/>
         <attr name="maskColor" format="color"/>
-
     </declare-styleable>
-
 </resources>

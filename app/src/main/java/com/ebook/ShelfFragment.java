@@ -34,10 +34,10 @@ public class ShelfFragment extends Fragment {
     //初始化
     private void initEvents(View v) {
         mContext = getActivity();
-        mBookList = BookLab.newInstance(mContext).getBookList();
+        mBookList = new BookLab(mContext).getBookList();
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.fragment_book_shelf_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));  //网格布局
-        recyclerView.setAdapter(new BookAdapter(mBookList));    //设置Adapter
+        recyclerView.setAdapter(new BookAdapter(mBookList));    //设置Adapter适配器
     }
 
     private class BookAdapter extends RecyclerView.Adapter<BookHolder> {

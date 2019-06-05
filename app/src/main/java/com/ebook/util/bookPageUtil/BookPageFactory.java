@@ -71,7 +71,7 @@ public class BookPageFactory {
 
     //初始化数据
     private void initDatas() {
-        Book book = BookLab.newInstance(mContext).getBookList().get(mBookId);   //获得点击书架上对应的书
+        Book book = new BookLab(mContext).getBookList().get(mBookId);   //获得点击书架上对应的书
 
         marginWidth = (int) (mWidth / 30f);             //边宽
         marginHeight = (int) (mHeight / 60f);           //边高

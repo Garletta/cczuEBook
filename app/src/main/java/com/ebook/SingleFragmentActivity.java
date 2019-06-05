@@ -1,12 +1,9 @@
 package com.ebook;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.WindowManager;
 
 //简单的fragment页面
 public abstract class SingleFragmentActivity extends AppCompatActivity {

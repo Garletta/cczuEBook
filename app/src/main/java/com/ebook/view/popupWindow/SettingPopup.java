@@ -77,7 +77,7 @@ public class SettingPopup extends BasePopupWindow implements View.OnClickListene
     private void initEvents() {
         PaintInfo paintInfo = SaveHelper.getObject(mContext, SaveHelper.PAINT_INFO);
         if (paintInfo != null) {
-            mSeekBars[1].setProgress(paintInfo.textSize - ReadingFragment.TEXT_SIZE_DELTA);
+            mSeekBars[1].setProgress(paintInfo.textSize - 50);
         }
         mTheme = SaveHelper.getInt(mContext, SaveHelper.THEME);
         mFlipStyle = SaveHelper.getInt(mContext, SaveHelper.FLIP_STYLE);

@@ -36,11 +36,11 @@ public abstract class BasePopupWindow extends PopupWindow {
         setTouchInterceptor(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-                    dismiss();
-                    return true;
-                }
-                return false;
+            if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                dismiss();
+                return true;
+            }
+            return false;
             }
         });
     }
