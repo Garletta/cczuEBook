@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-//简单的fragment页面
+//简单的fragment
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     @Override

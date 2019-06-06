@@ -89,9 +89,9 @@ public class SettingPopup extends BasePopupWindow implements View.OnClickListene
             button.setOnClickListener(this);
         }
         for (SeekBar seekBar : mSeekBars) {
-            seekBar.setOnSeekBarChangeListener(this);
-        }
 
+        seekBar.setOnSeekBarChangeListener(this);
+    }
         mSwitchView.setOnCheckedChangeListener(new SwitchView.OnCheckedChangeListener() {
             @Override
             public void onCheckedChange(boolean isChecked, View view) {
@@ -131,7 +131,7 @@ public class SettingPopup extends BasePopupWindow implements View.OnClickListene
         ObjectAnimator animator = ObjectAnimator.ofInt(mCardView, "cardBackgroundColor", mPopupColors[mTheme], mPopupColors[theme]).setDuration(500);
         animator.setEvaluator(new ArgbEvaluator());
         animator.start();
-        mTheme = theme;
+        mTheme = theme;//页面主题颜色更改
         setCurThemeBtn();
         setCurSeekBarStyle();
         setCurFlipStyleBtn();

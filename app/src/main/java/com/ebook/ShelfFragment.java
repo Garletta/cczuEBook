@@ -27,7 +27,7 @@ public class ShelfFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_shelf_layout, container, false);    //书架视图
-        initEvents(v);
+        initEvents(v);  //初始化
         return v;
     }
 
@@ -40,6 +40,7 @@ public class ShelfFragment extends Fragment {
         recyclerView.setAdapter(new BookAdapter(mBookList));    //设置Adapter适配器
     }
 
+    //书适配器
     private class BookAdapter extends RecyclerView.Adapter<BookHolder> {
         private List<Book> bookList = new ArrayList<>();
         public BookAdapter(List<Book> bookList) {
@@ -61,13 +62,14 @@ public class ShelfFragment extends Fragment {
         }
     }
 
+    //ViewHolder作为RecyclerView内部复用的单位，直接避免了不必要的findViewById
     private class BookHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView mBookCover;
         private Book mBook;
         public BookHolder(View itemView) {
             super(itemView);
-            mBookCover = (ImageView) itemView.findViewById(R.id.item_recycler_view_image_view);
-            itemView.setOnClickListener(this);
+            mBookCover = (ImageView) itemView.findViewById(R.id.item_recycler_view_image_view); //把封面放上书架
+            itemView.setOnClickListener(this);  //在封面设置点击监听器
         }
         public void bind(Book book) {
             mBook = book;
@@ -75,8 +77,8 @@ public class ShelfFragment extends Fragment {
         }
         @Override
         public void onClick(View v) {
-            Intent intent = ReadingActivity.newIntent(mContext, mBookList.indexOf(mBook));
-            startActivity(intent);
+            Intent intent = ReadingActivity.newIntent(mContext, mBookList.indexOf(mBook));  //点击封面进入阅读
+            startActivity(intent);  //启动阅读页面activity
         }
     }
 }

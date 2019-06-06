@@ -244,12 +244,12 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
                 hideBottomBar();
             }
         });
-        mContentPopup.setOnContentClicked(new ContentPopup.OnContentSelectedListener() {
+        mContentPopup.setOnContentClicked(new ContentPopup.OnContentSelectedListener() {  //注册监听器实现回调方法
             @Override
             public void OnContentClicked(int paraIndex) {
-                mPageList = mBookPageFactory.updatePagesByContent(paraIndex);
-                mFlipView.setPageByContent(mPageList);
-                mContentPopup.dismiss();
+                mPageList = mBookPageFactory.updatePagesByContent(paraIndex);   //通过目录跳转指定章节
+                mFlipView.setPageByContent(mPageList);  //通过目录翻页
+                mContentPopup.dismiss();    //弹窗消失
             }
         });
         mSettingPopup.setOnSettingChangedListener(new SettingPopup.OnSettingChangedListener() {
